@@ -4,6 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const logger = require("./logger");
 const connectDB = require("./db");
+const userRoute = require("./routes/userRoute");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -45,6 +46,8 @@ connectDB();
 app.get("/", (req, res) => {
   res.send({ message: "Inventory management application backend server." });
 });
+
+app.use("/api", userRoute);
 
 // Not found route
 app.use((req, res, next) => {

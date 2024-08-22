@@ -38,7 +38,7 @@ const signupValidation = [
     )
     .trim(),
   check("role")
-    .isISIN(["user", "supplier"])
+    .isIn(["user", "supplier"])
     .withMessage("Only user and supplier roles are allowed.")
     .trim(),
 ];
