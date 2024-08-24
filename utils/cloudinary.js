@@ -1,5 +1,9 @@
 const { unlinkSync } = require("fs");
+const dotenv = require("dotenv");
 const { v2 } = require("cloudinary");
+
+// Load environment variables from .env file
+dotenv.config();
 
 // Cloudinary configuration
 v2.config({
@@ -11,17 +15,17 @@ v2.config({
 const uploadImage = async (file) => {
   try {
     if (file) {
-      const response = await v2.uploader.upload(file, {
+      const { secure_url } = await v2.uploader.upload(file, {
         folder: "inventory-management",
       });
 
       unlinkSync(file);
 
-      return response;
+      return secure_url;
     }
   } catch (err) {
     unlinkSync(file);
   }
 };
 
-module.exports = uploadImage;
+module.exports = { uploadImage };

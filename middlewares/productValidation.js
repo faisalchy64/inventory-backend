@@ -1,3 +1,4 @@
+const { unlinkSync } = require("fs");
 const { check, validationResult } = require("express-validator");
 
 const productValidation = [
@@ -10,20 +11,23 @@ const productValidation = [
     .isAlpha("en-US", { ignore: " " })
     .withMessage("Product name should contain only alphabets.")
     .trim(),
-  check("productImage")
-    .not()
-    .isEmpty()
-    .withMessage("Product image is required.")
-    .isURL({ protocols: ["https"] })
-    .withMessage("Product image should contain only url.")
-    .trim(),
+  check("productImage").custom(async (value, { req }) => {
+    if (req.file && req.file.mimetype.includes("image") === false) {
+      unlinkSync(req.file.path);
+      throw new Error("Only image files are allowed.");
+    }
+
+    if (req.file === undefined) {
+      throw new Error("Product image is required.");
+    }
+  }),
   check("productDescription")
     .not()
     .isEmpty()
     .withMessage("Product description is required.")
     .isLength({ min: 3 })
     .withMessage("Minimum 3 characters needed.")
-    .isAlpha("en-US", { ignore: " -" })
+    .isAlpha("en-US", { ignore: " -." })
     .withMessage("Product description should contain only alphabets.")
     .trim(),
   check("productPrice")
