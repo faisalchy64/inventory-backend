@@ -74,7 +74,7 @@ const productValidationCheck = (req, res, next) => {
       result[error] = errors[error].msg;
     });
 
-    res.status(500).send(result);
+    res.status(400).send(result);
   }
 };
 
