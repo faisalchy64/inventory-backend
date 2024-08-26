@@ -9,12 +9,12 @@ const getProducts = async (req, res, next) => {
 
     if (createdBy) {
       const products = await Product.find({ createdBy }).limit(6).skip(skip);
-      const total = await Product.count({ createdBy });
+      const total = await Product.countDocuments({ createdBy });
       return res.send({ products, total });
     }
 
     const products = await Product.find({}).limit(6).skip(skip);
-    const total = await Product.count({});
+    const total = await Product.countDocuments();
 
     res.send({ products, total });
   } catch (err) {

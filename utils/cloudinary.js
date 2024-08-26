@@ -28,4 +28,13 @@ const uploadImage = async (file) => {
   }
 };
 
-module.exports = { uploadImage };
+const destroyImage = async (src) => {
+  try {
+    const public_id = src.split("/").pop().split(".")[0];
+    await v2.uploader.destroy(`inventory-management/${public_id}`);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
+module.exports = { uploadImage, destroyImage };
