@@ -49,9 +49,31 @@ const createProduct = async (req, res, next) => {
 // Update product
 const updateProduct = async (req, res, next) => {
   try {
-    // Only supplier can update product
-    // So, we need to check if user is supplier
-    // Image upload
+    const { id } = req.params;
+
+    if (req.file) {
+      const response = await Product.findById(id);
+      await destroyImage(response.productImage);
+      const productImage = await uploadImage(req.file.path);
+      const product = await Product.findByIdAndUpdate(
+        id,
+        {
+          ...req.body,
+          productImage,
+        },
+        { new: true }
+      );
+
+      return res.send(product);
+    }
+
+    const product = await Product.findByIdAndUpdate(
+      id,
+      { ...req.body },
+      { new: true }
+    );
+
+    res.send(product);
   } catch (err) {
     next({ message: "Update product request failed." });
   }

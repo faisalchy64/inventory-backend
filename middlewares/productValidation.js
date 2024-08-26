@@ -12,6 +12,10 @@ const productValidation = [
     .withMessage("Product name should contain only alphabets.")
     .trim(),
   check("productImage").custom(async (value, { req }) => {
+    if (value) {
+      return value;
+    }
+
     if (req.file && req.file.mimetype.includes("image") === false) {
       unlinkSync(req.file.path);
       throw new Error("Only image files are allowed.");

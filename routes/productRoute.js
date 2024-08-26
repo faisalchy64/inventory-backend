@@ -26,7 +26,13 @@ router.post(
   createProduct
 );
 
-router.patch("/products/:id", updateProduct);
+router.patch(
+  "/products/:id",
+  upload.single("productImage"),
+  productValidation,
+  productValidationCheck,
+  updateProduct
+);
 
 router.delete("/products/:id", deleteProduct);
 
