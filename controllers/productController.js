@@ -1,5 +1,5 @@
 const Product = require("../models/productModel");
-const { uploadImage } = require("../utils/cloudinary");
+const { uploadImage, destroyImage } = require("../utils/cloudinary");
 
 // Get all products
 const getProducts = async (req, res, next) => {
@@ -60,8 +60,12 @@ const updateProduct = async (req, res, next) => {
 // Delete product
 const deleteProduct = async (req, res, next) => {
   try {
-    // Only supplier can delete product
-    // So, we need to check if user is supplier
+    const { id } = req.params;
+    const { productImage } = await Product.findById(id);
+    await destroyImage(productImage);
+    const response = await Product.findByIdAndDelete(id);
+
+    res.send(response);
   } catch (err) {
     next({ message: "Delete product request failed." });
   }
