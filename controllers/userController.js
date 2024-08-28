@@ -32,14 +32,25 @@ const signin = async (req, res, next) => {
           // save refresh token
           await User.findByIdAndUpdate(_id, { refreshToken });
 
+          res.cookie("accessToken", accessToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+            maxAge: 3600,
+          });
+          res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+            maxAge: 86400,
+          });
+
           return res.send({
             _id,
             name,
             email,
             role,
             isVerified,
-            accessToken,
-            refreshToken,
           });
         }
       }
