@@ -6,6 +6,10 @@ const {
   productValidationCheck,
 } = require("../middlewares/productValidation");
 const {
+  productUpdateValidation,
+  productUpdateValidationCheck,
+} = require("../middlewares/productUpdateValidation");
+const {
   getProducts,
   getProduct,
   createProduct,
@@ -35,8 +39,8 @@ router.patch(
   verifyJWT,
   verifySupplier,
   upload.single("productImage"),
-  productValidation,
-  productValidationCheck,
+  productUpdateValidation,
+  productUpdateValidationCheck,
   updateProduct
 );
 
