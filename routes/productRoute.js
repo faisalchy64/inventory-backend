@@ -1,5 +1,6 @@
 const express = require("express");
 const verifyJWT = require("../middlewares/verifyJWT");
+const verifySupplier = require("../middlewares/verifySupplier");
 const {
   productValidation,
   productValidationCheck,
@@ -22,6 +23,7 @@ router.get("/products/:id", getProduct);
 router.post(
   "/products",
   verifyJWT,
+  verifySupplier,
   upload.single("productImage"),
   productValidation,
   productValidationCheck,
@@ -31,12 +33,13 @@ router.post(
 router.patch(
   "/products/:id",
   verifyJWT,
+  verifySupplier,
   upload.single("productImage"),
   productValidation,
   productValidationCheck,
   updateProduct
 );
 
-router.delete("/products/:id", verifyJWT, deleteProduct);
+router.delete("/products/:id", verifyJWT, verifySupplier, deleteProduct);
 
 module.exports = router;
