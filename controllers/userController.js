@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const generateTokens = require("../utils/generateTokens");
 const User = require("../models/userModel");
 
 const signin = async (req, res, next) => {
@@ -12,21 +12,13 @@ const signin = async (req, res, next) => {
 
       if (compare) {
         const { _id, name, email, role, isVerified } = user;
-        const accessToken = jwt.sign(
-          { _id, name, email, role, isVerified },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: "1h",
-          }
-        );
-
-        const refreshToken = jwt.sign(
-          { _id, name, email, role, isVerified },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: "1d",
-          }
-        );
+        const { accessToken, refreshToken } = generateTokens({
+          _id,
+          name,
+          email,
+          role,
+          isVerified,
+        });
 
         if (accessToken && refreshToken) {
           // save refresh token
@@ -55,7 +47,7 @@ const signin = async (req, res, next) => {
         }
       }
 
-      return next({ status: 401, message: "Password was wrong." });
+      return next({ status: 401, message: "Incorrect email or password." });
     }
 
     return next({ status: 404, message: "User not found." });
