@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
-const generateTokens = require("../utils/generateTokens");
+const { generateToken, generateTokens } = require("../utils/tokens");
+const mailSender = require("../utils/mailSender");
 const User = require("../models/userModel");
 
 const signin = async (req, res, next) => {
@@ -72,6 +73,35 @@ const signup = async (req, res, next) => {
 
       if (user) {
         // send verification email
+
+        const token = generateToken(user._id, "5m");
+
+        await mailSender(
+          user.email,
+          "Verify your account.",
+          `
+          <div style="padding: 1.5rem">
+            <h1>Confirm your account</h1>
+            <p>
+              Thank you for signing up for Inventory Management Application. To confirm
+              your account, please follow the button below.
+            </p>
+            <a
+              href="${process.env.CORS_ORIGIN}/verify/${token}"
+              style="
+                display: inline-block;
+                color: #fff;
+                text-decoration: none;
+                background-color: #000;
+                padding: 1rem 1.5rem;
+                margin: 0.5rem 0;
+                border-radius: 0.35rem;
+              "
+              >Confirm Account
+            </a>
+          </div>
+          `
+        );
 
         res
           .status(201)
