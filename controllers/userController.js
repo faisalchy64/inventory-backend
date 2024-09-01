@@ -1,5 +1,9 @@
 const bcrypt = require("bcrypt");
-const { generateToken, generateTokens } = require("../utils/tokens");
+const {
+  generateToken,
+  generateTokens,
+  verifyToken,
+} = require("../utils/tokens");
 const mailSender = require("../utils/mailSender");
 const User = require("../models/userModel");
 
@@ -113,4 +117,30 @@ const signup = async (req, res, next) => {
   }
 };
 
-module.exports = { signin, signup };
+const userVerify = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+    const decoded = verifyToken(token);
+    const user = await User.findById(decoded && decoded._id);
+
+    if (user && user.isVerified) {
+      return next({ status: 409, message: "User already verified." });
+    }
+
+    if (user) {
+      const response = await User.findByIdAndUpdate(
+        user._id,
+        { isVerified: true },
+        { new: true }
+      ).select("name email role isVerified");
+
+      return res.send(response);
+    }
+
+    return next({ status: 401, message: "Invalid verification token." });
+  } catch (err) {
+    next({ message: "User verification failed." });
+  }
+};
+
+module.exports = { signin, signup, userVerify };
