@@ -29,26 +29,22 @@ const signin = async (req, res, next) => {
           // save refresh token
           await User.findByIdAndUpdate(_id, { refreshToken });
 
-          res.cookie("accessToken", accessToken, {
+          const options = {
             httpOnly: true,
             secure: true,
             sameSite: "strict",
-            maxAge: 3600,
-          });
-          res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            maxAge: 86400,
-          });
+          };
 
-          return res.send({
-            _id,
-            name,
-            email,
-            role,
-            isVerified,
-          });
+          return res
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", refreshToken, options)
+            .send({
+              _id,
+              name,
+              email,
+              role,
+              isVerified,
+            });
         }
       }
 
@@ -143,4 +139,74 @@ const userVerify = async (req, res, next) => {
   }
 };
 
-module.exports = { signin, signup, userVerify };
+const signout = async (req, res, next) => {
+  try {
+    const { _id } = req.decoded;
+    await User.findByIdAndUpdate(_id, { refreshToken: "" });
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    };
+
+    res
+      .clearCookie("accessToken", options)
+      .clearCookie("refreshToken", options)
+      .send({ message: "Signout successful." });
+  } catch (err) {
+    next({ message: "User signout failed." });
+  }
+};
+
+const refreshAccessToken = async (req, res, next) => {
+  try {
+    const { refreshToken } = req.cookies;
+    const user = await User.findOne({ refreshToken }).select(
+      "name email role isVerified refreshToken"
+    );
+
+    if (user && user.refreshToken === refreshToken) {
+      const decoded = verifyToken(refreshToken);
+
+      if (decoded) {
+        const { _id, name, email, role, isVerified } = user;
+        const { accessToken, refreshToken } = generateTokens({
+          _id,
+          name,
+          email,
+          role,
+          isVerified,
+        });
+
+        if (accessToken && refreshToken) {
+          // save refresh token
+          await User.findByIdAndUpdate(_id, { refreshToken });
+
+          const options = {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+          };
+
+          return res
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", refreshToken, options)
+            .send({
+              _id,
+              name,
+              email,
+              role,
+              isVerified,
+            });
+        }
+      }
+    }
+
+    return next({ status: 401, message: "Invalid refresh token." });
+  } catch (err) {
+    next({ message: "Failed to refresh access token." });
+  }
+};
+
+module.exports = { signin, signup, userVerify, signout, refreshAccessToken };
