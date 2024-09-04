@@ -103,9 +103,7 @@ const signup = async (req, res, next) => {
           `
         );
 
-        res
-          .status(201)
-          .send({ status: 201, message: "Verification email sent." });
+        res.status(201).send({ message: "Verification email sent." });
       }
     }
   } catch (err) {
@@ -209,4 +207,77 @@ const refreshAccessToken = async (req, res, next) => {
   }
 };
 
-module.exports = { signin, signup, userVerify, signout, refreshAccessToken };
+const forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (user) {
+      const resetPasswordToken = generateToken(user._id, "5m");
+      await User.findByIdAndUpdate(user._id, { resetPasswordToken });
+      await mailSender(
+        user.email,
+        "Reset your password.",
+        `
+        <div style="padding: 1.5rem">
+          <h1>Reset your password</h1>
+          <p>
+            To reset your password, please follow the button below.
+          </p>
+          <a
+            href="${process.env.CORS_ORIGIN}/verify/${resetPasswordToken}"
+            style="
+              display: inline-block;
+              color: #fff;
+              text-decoration: none;
+              background-color: #000;
+              padding: 1rem 1.5rem;
+              margin: 0.5rem 0;
+              border-radius: 0.35rem;
+            "
+            >Reset Password
+          </a>
+        </div>
+        `
+      );
+
+      return res.send({ message: "Reset password email sent." });
+    }
+
+    return next({ status: 404, message: "User not found." });
+  } catch (err) {
+    next({ message: "Forgot password request failed." });
+  }
+};
+
+const resetPassword = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+    const decoded = verifyToken(token);
+    const user = await User.findById(decoded && decoded._id);
+
+    if (user && user.resetPasswordToken === token) {
+      const password = await bcrypt.hash(req.body.password, 10);
+      await User.findByIdAndUpdate(user._id, {
+        password,
+        $unset: { resetPasswordToken: 1 },
+      });
+
+      return res.send({ message: "Reset password successful." });
+    }
+
+    next({ status: 401, message: "Expired or invalid reset password token." });
+  } catch (err) {
+    next({ message: "Reset password request failed." });
+  }
+};
+
+module.exports = {
+  signin,
+  signup,
+  userVerify,
+  signout,
+  refreshAccessToken,
+  forgotPassword,
+  resetPassword,
+};

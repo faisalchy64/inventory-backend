@@ -12,6 +12,8 @@ const {
   signout,
   userVerify,
   refreshAccessToken,
+  forgotPassword,
+  resetPassword,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -25,5 +27,9 @@ router.get("/verify/:token", userVerify);
 router.get("/signout", verifyJWT, signout);
 
 router.get("/refresh-token", refreshAccessToken);
+
+router.post("/forgot-password", forgotPassword);
+
+router.patch("/reset-password/:token", resetPassword);
 
 module.exports = router;
