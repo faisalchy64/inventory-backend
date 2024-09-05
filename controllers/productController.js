@@ -4,12 +4,13 @@ const { uploadImage, destroyImage } = require("../utils/cloudinary");
 // Get all products
 const getProducts = async (req, res, next) => {
   try {
-    const { page, createdBy } = req.query;
+    const { page, supplierId } = req.query;
     const skip = page > 1 ? (page - 1) * 6 : 0;
 
-    if (createdBy) {
-      const products = await Product.find({ createdBy }).limit(6).skip(skip);
-      const total = await Product.countDocuments({ createdBy });
+    if (supplierId) {
+      const products = await Product.find({ supplierId }).limit(6).skip(skip);
+      const total = await Product.countDocuments({ supplierId });
+
       return res.send({ products, total });
     }
 

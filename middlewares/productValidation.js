@@ -55,7 +55,11 @@ const productValidation = [
     .isNumeric({ no_symbols: true })
     .withMessage("Minimum order quantity should contain only numbers.")
     .trim(),
-  check("supplier").not().isEmpty().withMessage("Supplier is required.").trim(),
+  check("supplierId")
+    .not()
+    .isEmpty()
+    .withMessage("Supplier id is required.")
+    .trim(),
 ];
 
 const productUpdateValidation = [
