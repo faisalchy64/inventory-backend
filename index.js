@@ -7,6 +7,7 @@ const logger = require("./logger");
 const connectDB = require("./db");
 const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoute");
+const orderRoute = require("./routes/orderRoute");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -53,6 +54,8 @@ app.get("/", (req, res) => {
 app.use("/api", userRoute);
 
 app.use("/api", productRoute);
+
+app.use("/api", orderRoute);
 
 // Not found route
 app.use((req, res, next) => {

@@ -16,7 +16,7 @@ const verifyJWT = (req, res, next) => {
 
       const user = await User.findById(decoded._id);
 
-      if (user) {
+      if (user && user.isVerified) {
         req.decoded = decoded;
         return next();
       }
