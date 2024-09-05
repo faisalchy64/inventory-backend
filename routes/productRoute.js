@@ -3,12 +3,10 @@ const verifyJWT = require("../middlewares/verifyJWT");
 const verifySupplier = require("../middlewares/verifySupplier");
 const {
   productValidation,
-  productValidationCheck,
-} = require("../middlewares/productValidation");
-const {
   productUpdateValidation,
+  productValidationCheck,
   productUpdateValidationCheck,
-} = require("../middlewares/productUpdateValidation");
+} = require("../middlewares/productValidation");
 const {
   getProducts,
   getProduct,

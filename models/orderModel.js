@@ -20,10 +20,15 @@ const orderSchema = new mongoose.Schema(
       enum: ["pending", "delivered", "canceled"],
       default: "pending",
     },
-    orderedBy: {
+    userId: {
       type: mongoose.Types.ObjectId,
       ref: "User",
-      required: [true, "Ordered-by is required."],
+      required: [true, "User id is required."],
+    },
+    supplierId: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
+      required: [true, "Supplier id is required."],
     },
     address: {
       type: String,
