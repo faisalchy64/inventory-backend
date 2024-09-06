@@ -8,6 +8,7 @@ const connectDB = require("./db");
 const userRoute = require("./routes/userRoute");
 const productRoute = require("./routes/productRoute");
 const orderRoute = require("./routes/orderRoute");
+const adminRoute = require("./routes/adminRoute");
 
 // Load environment variables from .env file
 dotenv.config();
@@ -56,6 +57,8 @@ app.use("/api", userRoute);
 app.use("/api", productRoute);
 
 app.use("/api", orderRoute);
+
+app.use("/api", adminRoute);
 
 // Not found route
 app.use((req, res, next) => {
