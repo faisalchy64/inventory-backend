@@ -39,14 +39,20 @@ const createOrder = async (req, res, next) => {
 const updateOrder = async (req, res, next) => {
   try {
     const { id } = req.params;
+    const { status } = req.body;
+    const states = ["pending", "delivered", "canceled"];
 
-    const order = await Order.findByIdAndUpdate(
-      id,
-      { ...req.body },
-      { new: true }
-    );
+    if (states.includes(status)) {
+      const order = await Order.findByIdAndUpdate(
+        id,
+        { status },
+        { new: true }
+      );
 
-    res.send(order);
+      return res.send(order);
+    }
+
+    next({ status: 409, message: "Invalid order status." });
   } catch (err) {
     next({ message: "Update order request failed." });
   }
