@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
-    productId: {
+    product: {
       type: mongoose.Types.ObjectId,
       ref: "Product",
-      required: [true, "Product id is required."],
+      required: [true, "Id is required."],
     },
     totalPrice: {
       type: Number,
@@ -20,15 +20,15 @@ const orderSchema = new mongoose.Schema(
       enum: ["pending", "delivered", "canceled"],
       default: "pending",
     },
-    userId: {
+    user: {
       type: mongoose.Types.ObjectId,
       ref: "User",
-      required: [true, "User id is required."],
+      required: [true, "Id is required."],
     },
-    supplierId: {
+    supplier: {
       type: mongoose.Types.ObjectId,
       ref: "User",
-      required: [true, "Supplier id is required."],
+      required: [true, "Id is required."],
     },
     address: {
       type: String,

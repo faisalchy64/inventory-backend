@@ -4,39 +4,39 @@ const productSchema = new mongoose.Schema(
   {
     productName: {
       type: String,
-      required: [true, "Product name is required."],
+      required: [true, "Name is required."],
       lowercase: true,
       trim: true,
     },
     productImage: {
       type: String,
-      required: [true, "Product image is required."],
+      required: [true, "Image is required."],
     },
     productDescription: {
       type: String,
-      required: [true, "Product description is required."],
+      required: [true, "Description is required."],
     },
     productPrice: {
       type: Number,
-      required: [true, "Product price is required."],
+      required: [true, "Price is required."],
     },
     productQuantity: {
       type: Number,
-      required: [true, "Product quantity is required."],
+      required: [true, "Quantity is required."],
     },
     productUnit: {
       type: String,
-      required: [true, "Product unit is required."],
+      required: [true, "Unit is required."],
       enum: ["kg", "dozen", "piece"],
     },
     minimumQuantity: {
       type: Number,
       required: [true, "Minimum quantity is required."],
     },
-    createdBy: {
+    supplier: {
       type: mongoose.Types.ObjectId,
       ref: "User",
-      required: [true, "Created-by is required."],
+      required: [true, "Id is required."],
     },
     reviews: [
       {

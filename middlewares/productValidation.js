@@ -5,11 +5,11 @@ const productValidation = [
   check("productName")
     .not()
     .isEmpty()
-    .withMessage("Product name is required.")
+    .withMessage("Name is required.")
     .isLength({ min: 3 })
     .withMessage("Minimum 3 characters needed.")
     .isAlpha("en-US", { ignore: " " })
-    .withMessage("Product name should contain only alphabets.")
+    .withMessage("Name should contain only alphabets.")
     .trim(),
   check("productImage").custom((value, { req }) => {
     if (req.file && req.file.mimetype.includes("image") === false) {
@@ -18,31 +18,31 @@ const productValidation = [
     }
 
     if (req.file === undefined) {
-      throw new Error("Product image is required.");
+      throw new Error("Image is required.");
     }
   }),
   check("productDescription")
     .not()
     .isEmpty()
-    .withMessage("Product description is required.")
+    .withMessage("Description is required.")
     .isLength({ min: 3 })
     .withMessage("Minimum 3 characters needed.")
     .isAlpha("en-US", { ignore: " -." })
-    .withMessage("Product description should contain only alphabets.")
+    .withMessage("Description should contain only alphabets.")
     .trim(),
   check("productPrice")
     .not()
     .isEmpty()
-    .withMessage("Product price is required.")
+    .withMessage("Price is required.")
     .isNumeric({ no_symbols: true })
-    .withMessage("Product price should contain only numbers.")
+    .withMessage("Price should contain only numbers.")
     .trim(),
   check("productQuantity")
     .not()
     .isEmpty()
-    .withMessage("Product quantity is required.")
+    .withMessage("Quantity is required.")
     .isNumeric({ no_symbols: true })
-    .withMessage("Product quantity should contain only numbers.")
+    .withMessage("Quantity should contain only numbers.")
     .trim(),
   check("productUnit")
     .isIn(["kg", "dozen", "piece"])
@@ -51,15 +51,11 @@ const productValidation = [
   check("minimumQuantity")
     .not()
     .isEmpty()
-    .withMessage("Minimum order quantity is required.")
+    .withMessage("Minimum quantity is required.")
     .isNumeric({ no_symbols: true })
-    .withMessage("Minimum order quantity should contain only numbers.")
+    .withMessage("Minimum quantity should contain only numbers.")
     .trim(),
-  check("supplierId")
-    .not()
-    .isEmpty()
-    .withMessage("Supplier id is required.")
-    .trim(),
+  check("supplier").not().isEmpty().withMessage("Id is required.").trim(),
 ];
 
 const productUpdateValidation = [
@@ -68,7 +64,7 @@ const productUpdateValidation = [
     .isLength({ min: 3 })
     .withMessage("Minimum 3 characters needed.")
     .isAlpha("en-US", { ignore: " " })
-    .withMessage("Product name should contain only alphabets.")
+    .withMessage("Name should contain only alphabets.")
     .trim(),
   check("productImage")
     .optional()
@@ -83,17 +79,17 @@ const productUpdateValidation = [
     .isLength({ min: 3 })
     .withMessage("Minimum 3 characters needed.")
     .isAlpha("en-US", { ignore: " -." })
-    .withMessage("Product description should contain only alphabets.")
+    .withMessage("Description should contain only alphabets.")
     .trim(),
   check("productPrice")
     .optional()
     .isNumeric({ no_symbols: true })
-    .withMessage("Product price should contain only numbers.")
+    .withMessage("Price should contain only numbers.")
     .trim(),
   check("productQuantity")
     .optional()
     .isNumeric({ no_symbols: true })
-    .withMessage("Product quantity should contain only numbers.")
+    .withMessage("Quantity should contain only numbers.")
     .trim(),
   check("productUnit")
     .optional()
@@ -103,7 +99,7 @@ const productUpdateValidation = [
   check("minimumQuantity")
     .optional()
     .isNumeric({ no_symbols: true })
-    .withMessage("Minimum order quantity should contain only numbers.")
+    .withMessage("Minimum quantity should contain only numbers.")
     .trim(),
 ];
 

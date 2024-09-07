@@ -1,11 +1,7 @@
 const { check, validationResult } = require("express-validator");
 
 const orderValidation = [
-  check("productId")
-    .not()
-    .isEmpty()
-    .withMessage("Product id is required.")
-    .trim(),
+  check("product").not().isEmpty().withMessage("Id is required.").trim(),
   check("totalPrice")
     .not()
     .isEmpty()
@@ -20,12 +16,8 @@ const orderValidation = [
     .isNumeric({ no_symbols: true })
     .withMessage("Total quantity should contain only numbers.")
     .trim(),
-  check("userId").not().isEmpty().withMessage("User id is required.").trim(),
-  check("supplierId")
-    .not()
-    .isEmpty()
-    .withMessage("Supplier id is required.")
-    .trim(),
+  check("user").not().isEmpty().withMessage("Id is required.").trim(),
+  check("supplier").not().isEmpty().withMessage("Id is required.").trim(),
   check("address").not().isEmpty().withMessage("Address is required.").trim(),
 ];
 
