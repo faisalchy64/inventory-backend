@@ -73,8 +73,7 @@ const signup = async (req, res, next) => {
 
       if (user) {
         // send verification email
-
-        const token = generateToken(user._id, "5m");
+        const token = generateToken(user._id, "15m");
 
         await mailSender(
           user.email,
@@ -213,7 +212,7 @@ const forgotPassword = async (req, res, next) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      const resetPasswordToken = generateToken(user._id, "5m");
+      const resetPasswordToken = generateToken(user._id, "15m");
       await User.findByIdAndUpdate(user._id, { resetPasswordToken });
       await mailSender(
         user.email,
@@ -260,7 +259,7 @@ const resetPassword = async (req, res, next) => {
       const password = await bcrypt.hash(req.body.password, 10);
       await User.findByIdAndUpdate(user._id, {
         password,
-        $unset: { resetPasswordToken: 1 },
+        resetPasswordToken: "",
       });
 
       return res.send({ message: "Reset password successful." });

@@ -44,9 +44,9 @@ const productValidation = [
     .isNumeric({ no_symbols: true })
     .withMessage("Quantity should contain only numbers.")
     .trim(),
-  check("productUnit")
+  check("productMeasure")
     .isIn(["kg", "dozen", "piece"])
-    .withMessage("Only kg, dozen and piece units are allowed.")
+    .withMessage("Only kg, dozen and piece measures are allowed.")
     .trim(),
   check("minimumQuantity")
     .not()

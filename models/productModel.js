@@ -24,9 +24,9 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Quantity is required."],
     },
-    productUnit: {
+    productMeasure: {
       type: String,
-      required: [true, "Unit is required."],
+      required: [true, "Measure is required."],
       enum: ["kg", "dozen", "piece"],
     },
     minimumQuantity: {
@@ -38,15 +38,6 @@ const productSchema = new mongoose.Schema(
       ref: "User",
       required: [true, "Id is required."],
     },
-    reviews: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "User",
-        message: {
-          type: String,
-        },
-      },
-    ],
   },
   { timestamps: true }
 );
