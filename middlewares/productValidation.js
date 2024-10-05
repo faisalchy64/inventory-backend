@@ -20,6 +20,8 @@ const productValidation = [
     if (req.file === undefined) {
       throw new Error("Image is required.");
     }
+
+    return true;
   }),
   check("productDescription")
     .not()
