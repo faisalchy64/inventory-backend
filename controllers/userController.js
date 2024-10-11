@@ -224,7 +224,7 @@ const forgotPassword = async (req, res, next) => {
             To reset your password, please follow the button below.
           </p>
           <a
-            href="${process.env.CORS_ORIGIN}/verify/${resetPasswordToken}"
+            href="${process.env.CORS_ORIGIN}/reset-password/${resetPasswordToken}"
             style="
               display: inline-block;
               color: #fff;
@@ -265,7 +265,7 @@ const resetPassword = async (req, res, next) => {
       return res.send({ message: "Reset password successful." });
     }
 
-    next({ status: 401, message: "Expired or invalid reset password token." });
+    next({ status: 401, message: "Invalid reset password token." });
   } catch (err) {
     next({ message: "Reset password request failed." });
   }
