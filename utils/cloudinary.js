@@ -15,13 +15,17 @@ v2.config({
 const uploadImage = async (file) => {
   try {
     if (file) {
-      const { secure_url } = await v2.uploader.upload(file, {
+      const { public_id } = await v2.uploader.upload(file, {
         folder: "inventory-management",
+      });
+      const optimize_url = v2.url(public_id, {
+        fetch_format: "auto",
+        quality: "auto",
       });
 
       unlinkSync(file);
 
-      return secure_url;
+      return optimize_url;
     }
   } catch (err) {
     unlinkSync(file);
