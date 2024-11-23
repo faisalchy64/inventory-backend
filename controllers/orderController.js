@@ -1,3 +1,4 @@
+const Product = require("../models/productModel");
 const Order = require("../models/orderModel");
 
 // Get all orders
@@ -28,6 +29,12 @@ const getOreders = async (req, res, next) => {
 const createOrder = async (req, res, next) => {
   try {
     const order = await Order.create({ ...req.body });
+
+    if (order) {
+      await Product.findByIdAndUpdate(order.product, {
+        $inc: { productQuantity: -order.totalQuantity },
+      });
+    }
 
     res.status(201).send(order);
   } catch (err) {

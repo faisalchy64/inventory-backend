@@ -4,12 +4,12 @@ const { uploadImage, destroyImage } = require("../utils/cloudinary");
 // Get all products
 const getProducts = async (req, res, next) => {
   try {
-    const { page, supplierId } = req.query;
+    const { page, supplier } = req.query;
     const skip = page > 1 ? (page - 1) * 6 : 0;
 
-    if (supplierId) {
-      const products = await Product.find({ supplierId }).limit(6).skip(skip);
-      const total = await Product.countDocuments({ supplierId });
+    if (supplier) {
+      const products = await Product.find({ supplier }).limit(6).skip(skip);
+      const total = await Product.countDocuments({ supplier });
 
       return res.send({ products, total });
     }
@@ -29,7 +29,7 @@ const getProduct = async (req, res, next) => {
     const { id } = req.params;
     const product = await Product.findById(id);
 
-    res.send({ product });
+    res.send(product);
   } catch (err) {
     next({ message: "Fetch product request failed." });
   }

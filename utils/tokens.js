@@ -6,11 +6,11 @@ const generateToken = (_id, expiresIn) => {
 
 const generateTokens = (payload) => {
   const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "1d",
   });
 
   const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: "1d",
+    expiresIn: "30d",
   });
 
   return { accessToken, refreshToken };
